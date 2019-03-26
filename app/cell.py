@@ -8,9 +8,7 @@ class Cell:
         if value > 0:
             self.value = value
             self.isSolved = True
-        else:
-            for i in range(1, 10):
-                self.possibleValues.append(i)
+        else: self.possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     
     def equals(self, value):
         self.value = value
@@ -23,18 +21,21 @@ class Cell:
     def int(self):
         return self.value
 
+    def __radd__(self, other):
+        return other + self.value
+
     def updateCell(self):
         if len(self.possibleValues) == 1 and self.isSolved is False:
             self.value = self.possibleValues[0]
             self.isSolved = True
             return 1
+        elif len(self.possibleValues) == 0 and not self.isSolved: return -1
         else: return 0
 
     def removePossibleValue(self, value):
         if value in self.possibleValues:
             self.possibleValues.remove(value)
-            return self.updateCell()
-        else: return 0
+        return 0
 
         
     

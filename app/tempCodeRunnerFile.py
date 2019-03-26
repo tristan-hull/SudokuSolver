@@ -1,2 +1,2 @@
 
-                print(puzzle.showPuzzle())
+        solver.removeImpossibleValues(cell, puzzle)

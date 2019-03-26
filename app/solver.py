@@ -32,12 +32,39 @@ class Solver:
             for i in range(0, 9):
                 if any(puzzle.getRow(i).count(num) > 1 for x in puzzle.getRow(i)):
                     return False
-            for i in range(0, 9):
                 if any(puzzle.getColumn(i).count(num) > 1 for x in puzzle.getColumn(i)):
                     return False
-            for i in range(0, 9):
                 if any(puzzle.getSector(i).count(num) > 1 for x in puzzle.getSector(i)):
                     return False
+        return True
+
+    def bruteforceSolve(self, puzzle = 0, level = 0):
+        if puzzle == 0: puzzle = self.puzzle
+        if not 0 in puzzle:
+            return puzzle
+        # print(level + "\n" + puzzle.showPuzzle())
+        for cell in puzzle.cells:
+            if cell.value == 0:
+                for value in range(1, 10):
+                    possible = False
+                    if self.checkValid(puzzle, cell, value):
+                        puzzle.cells[cell.index].equals(value)
+                        newPuzzle = self.bruteforceSolve(puzzle, level + 1)
+                        if newPuzzle:
+                            return puzzle
+                        puzzle.cells[cell.index].equals(0)
+                        
+                return False
+                        # else: tempPuzzle = puzzle          
+        return False
+    
+    def checkValid(self, puzzle, cell, value):
+        for j in puzzle.getColumn(cell.index):
+            if j.value == value: return False
+        for j in puzzle.getRow(cell.index): 
+            if j.value == value: return False
+        for j in puzzle.getSector(cell.index):
+            if j.value == value: return False
         return True
 
     def advancedSolve(self):
@@ -48,36 +75,51 @@ class Solver:
                         if num in i.possibleValues:
                             i.equals(num)
                             self.puzzle.numToSolve -= 1
-                    return
+                            return
+                    
 
                 if (self.getOccurances(num, 'sector', index) == 1):
                     for i in self.puzzle.getSector(index):
                         if num in i.possibleValues:
                             i.equals(num)
                             self.puzzle.numToSolve -= 1
-                    return
+                            return
 
                 if (self.getOccurances(num, 'row', index) == 1):
                     for i in self.puzzle.getRow(index):
                         if num in i.possibleValues:
                             i.equals(num)
                             self.puzzle.numToSolve -= 1
-                    return
+                            return
+
+    def removeImpossibleValues(self, cell, puzzle = 0):
+        if puzzle == 0: puzzle = self.puzzle
+        for j in puzzle.getColumn(cell.index):
+            if j.isSolved:    
+                cell.removePossibleValue(j.value)
+        for j in puzzle.getRow(cell.index):
+            if j.isSolved:
+                cell.removePossibleValue(j.value)
+        for j in puzzle.getSector(cell.index):
+            if j.isSolved:    
+                cell.removePossibleValue(j.value)
 
     def solve(self):
         while self.puzzle.numToSolve != 0:
             num = self.puzzle.numToSolve
             for i in self.puzzle.cells:
                 if not i.isSolved:
-                    for j in self.puzzle.getColumn(i.index):
-                            self.puzzle.numToSolve -= i.removePossibleValue(j.value)
-                    for j in self.puzzle.getRow(i.index):
-                            self.puzzle.numToSolve -= i.removePossibleValue(j.value)
-                    for j in self.puzzle.getSector(i.index):
-                            self.puzzle.numToSolve -= i.removePossibleValue(j.value)
+                    self.removeImpossibleValues(i)
+                    self.puzzle.numToSolve -= i.updateCell()
 
+            if num == self.puzzle.numToSolve: self.advancedSolve()
             if num == self.puzzle.numToSolve: 
-                self.advancedSolve()
+                tempPuzzle =  self.bruteforceSolve()
+                if tempPuzzle:
+                    if self.checkPuzzle(self.puzzle): return True
+                else: return False
             if num == self.puzzle.numToSolve:
                 return False
         return True
+
+

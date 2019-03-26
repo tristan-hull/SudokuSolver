@@ -4,12 +4,12 @@ userInput = ""
 userData = []
 sudokuCSV = []
 
-with open("sudoku.csv", 'r') as filestream:
+with open("SudokuSolver\data\sudokuhard.csv", 'r') as filestream:
         for line in filestream:
                 currentline = line.split(",")
                 sudokuCSV.append(currentline)
 
-# userInput = "906008070012700080038600024081000209090030007370020640000560401000094800060100050"
+# userInput = "904060005068030400203500700350800640600009300009000500700000900000080000005000002"
 # for i in range(0, len(userInput)):
 #         data = []
 #         userData.append(int(userInput[i]))
@@ -18,7 +18,9 @@ with open("sudoku.csv", 'r') as filestream:
 # print(puzzle.showPuzzle())
 # solver = Solver(puzzle)
 # solver.solve()
+# # print(puzzle.cells[5].possibleValues)
 # print(puzzle.showPuzzle())
+# print(puzzle.toString())
 
 totalSolved = 0
 totalUnsolved = 0
@@ -33,7 +35,9 @@ for i in sudokuCSV:
         solver.solve()
         if puzzle.toString() == i[1][:-1]:
                 totalSolved += 1
-        else: totalUnsolved += 1
+        else: 
+                totalUnsolved += 1
+                # print(puzzle.toString())
 print("Total solved: " + str(totalSolved))
 print("Total unsovled: " + str(totalUnsolved))
 
