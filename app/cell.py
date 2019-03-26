@@ -19,7 +19,10 @@ class Cell:
     
     # def addValue(self, value):
     #     self.possibleValues.append(value)
-        
+    
+    def int(self):
+        return self.value
+
     def updateCell(self):
         if len(self.possibleValues) == 1 and self.isSolved is False:
             self.value = self.possibleValues[0]

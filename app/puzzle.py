@@ -7,6 +7,11 @@ class Puzzle:
             self.cells.append(Cell(numbers[i], i))
             if self.cells[i].isSolved: self.numToSolve -= 1 
 
+    def __contains__(self, value):
+        for i in self.cells:
+            if i.value == value: return True
+        return False
+
     # Returns the index of the 3x3 sector the cell resides in
     def getSectorNumber(self, index):
         r = int(index / 27)     # The row in the grid of 3x3 cells
@@ -32,6 +37,7 @@ class Puzzle:
     def getColumn(self, index):
         returnArray = []
         for i in range(9):
+            # print(type(index))
             returnArray.append(self.cells[9 * i + self.getColumnNumber(index)]) 
         return returnArray
 
