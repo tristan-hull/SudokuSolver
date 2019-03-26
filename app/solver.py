@@ -3,25 +3,24 @@ import copy
 class Solver:
     def __init__(self, puzzle):
         self.puzzle = puzzle
-        self.runThrough = 0
     
 
     def getOccurances(self, value, key, index):
         numOccurances = 0
         if key == 'row':
             for cell in self.puzzle.getRow(index):
-                for num in cell.possibleValues:
-                    if value == num: numOccurances += 1
+                if value in cell.possibleValues:
+                    numOccurances += 1
 
         if key == 'column':
             for cell in self.puzzle.getColumn(index):
-                for num in cell.possibleValues:
-                    if value == num: numOccurances += 1
+                if value in cell.possibleValues:
+                    numOccurances += 1
 
         if key == 'sector':
             for cell in self.puzzle.getSector(index):
-                for num in cell.possibleValues:
-                    if value == num: numOccurances += 1
+                if value in cell.possibleValues:
+                    numOccurances += 1
         return numOccurances
 
     def checkPuzzle(self, puzzle = 0):
@@ -79,6 +78,6 @@ class Solver:
 
             if num == self.puzzle.numToSolve: 
                 self.advancedSolve()
-        # print(self.puzzle.numToSolve)
-        if self.runThrough < 1 and self.puzzle.numToSolve > 0: solve(this.puzzle)
+            if num == self.puzzle.numToSolve:
+                return False
         return True

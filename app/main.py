@@ -4,7 +4,7 @@ userInput = ""
 userData = []
 sudokuCSV = []
 
-with open("SudokuSolver\data\sudokushort.csv", 'r') as filestream:
+with open("sudoku.csv", 'r') as filestream:
         for line in filestream:
                 currentline = line.split(",")
                 sudokuCSV.append(currentline)
@@ -23,7 +23,7 @@ with open("SudokuSolver\data\sudokushort.csv", 'r') as filestream:
 totalSolved = 0
 totalUnsolved = 0
 for i in sudokuCSV:
-        if totalSolved % 1000 == 0:
+        if totalSolved % 1 == 0:
                 print(totalSolved)
         input = []
         for j in i[0]:
@@ -33,10 +33,7 @@ for i in sudokuCSV:
         solver.solve()
         if puzzle.toString() == i[1][:-1]:
                 totalSolved += 1
-        else: 
-                totalUnsolved += 1
-                print(puzzle.cells[14].possibleValues)
-                print(puzzle.showPuzzle())
+        else: totalUnsolved += 1
 print("Total solved: " + str(totalSolved))
 print("Total unsovled: " + str(totalUnsolved))
 
